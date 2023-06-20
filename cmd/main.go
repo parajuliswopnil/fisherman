@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"io/fs"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -96,15 +98,71 @@ func main() {
 			if dir.Name()[0] != '.' {
 				PrintDirs(dir.Name(), dirName, false)
 			}
+		case "-p":
+			PrintDirStats(args[1], dirList)
+			return
 		default:
 			fmt.Println("invalid tag")
 			fmt.Println("<fisherman -h> for help")
 			return
 		}
-		
 
 	}
 
+}
+
+func PrintDirStats(root string, dirList []fs.DirEntry) {
+	fmt.Println("file information of", MainRoot)
+	fmt.Println("name                    |size                    |mode                   |isDir                    |")
+	fmt.Println("|-----------------------|------------------------|-----------------------|-------------------------|")
+
+	for _, dir := range dirList {
+		stats, err := os.Stat(root + "/" + dir.Name())
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		length := 0
+		name := stats.Name()
+
+		if len(name) < 24-1 {
+			length = len(name) + 1
+			for i := 0; i < 24-length; i++ {
+				name += " "
+			}
+		}
+
+		size := strconv.Itoa(int(stats.Size()))
+		if len(size) < 24 {
+			length = len(size) + 2
+			for i := 0; i < 24-length; i++ {
+				size += " "
+			}
+		}
+
+		mode := stats.Mode().String()
+		if len(mode) < 24 {
+			length = len(mode) + 3
+			for i := 0; i < 24-length; i++ {
+				mode += " "
+			}
+		}
+
+		yorno := "no"
+		isDir := stats.IsDir()
+		if isDir {
+			yorno = "yes"
+		}
+
+		if len(yorno) < 24 {
+			length = len(yorno) + 1
+			for i := 0; i < 24-length; i++ {
+				yorno += " "
+			}
+		}
+		fmt.Println(name, "|", size, "|", mode, "|", yorno, "|")
+		fmt.Println("'-----------------------|------------------------'-----------------------|-------------------------|")
+	}
 }
 
 func PrintDirs(root string, dirName []string, lastDir bool) {
