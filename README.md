@@ -11,3 +11,7 @@ then in your terminal,
 $ `source .bash_aliases`
 
 then, you will be able to use `fisherman`
+
+## Usage
+
+$ `fisherman -h` for all the help you need with `fisherman`
