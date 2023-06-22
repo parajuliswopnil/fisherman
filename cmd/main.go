@@ -48,6 +48,7 @@ func main() {
 			fmt.Println("|-l            |                list all|")
 			fmt.Println("|-e            |      extend directories|")
 			fmt.Println("|-a            |  extend all directories|")
+			fmt.Println("|-p            |  properties of all dirs|")
 			fmt.Println("'.-------------------------------------.'")
 			fmt.Println("By 'all directories', hidden directories also")
 			return
@@ -113,8 +114,9 @@ func main() {
 
 func PrintDirStats(root string, dirList []fs.DirEntry) {
 	fmt.Println("file information of", MainRoot)
+	fmt.Println("._________________________________________________________________________________________________.")
 	fmt.Println("name                    |size                    |mode                   |isDir                    |")
-	fmt.Println("|-----------------------|------------------------|-----------------------|-------------------------|")
+	fmt.Println("'-----------------------|------------------------|-----------------------|-------------------------|")
 
 	for _, dir := range dirList {
 		stats, err := os.Stat(root + "/" + dir.Name())
@@ -161,7 +163,7 @@ func PrintDirStats(root string, dirList []fs.DirEntry) {
 			}
 		}
 		fmt.Println(name, "|", size, "|", mode, "|", yorno, "|")
-		fmt.Println("'-----------------------|------------------------'-----------------------|-------------------------|")
+		fmt.Println("'-----------------------'------------------------'-----------------------|-------------------------|")
 	}
 }
 
